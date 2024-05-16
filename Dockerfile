@@ -1,15 +1,13 @@
 FROM python:3.11 AS builder
 WORKDIR /app
-COPY app /app
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "main.py"]
+COPY app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app/ .
+CMD ["python3", "main.py"]
 
-ARG FLASK_PORT=8080
-ENV FLASK_PORT=$FLASK_PORT
-
-FROM nginx:alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder /app /app
-EXPOSE $FLASK_PORT
+FROM nginx:latest
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/
+COPY --from=builder /app /usr/share/nginx/html
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
