@@ -1,0 +1,10 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Express app returning date and time",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
+
